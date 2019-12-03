@@ -1,2 +1,2 @@
-# 6250FinalProject
-This is a repository for 6250 Final Project
+# INFO6205_Life
+Repository for the Life project
