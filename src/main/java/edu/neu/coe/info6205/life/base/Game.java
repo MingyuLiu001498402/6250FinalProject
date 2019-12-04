@@ -56,6 +56,18 @@ public class Game implements Generational<Game, Grid>, Countable, Renderable {
 				return new Game(generation + 1, grid.generation(this.monitor), this, this.monitor);
 		}
 
+		public Game generation(BiConsumer<Long, Grid> monitor, boolean graph) {
+			monitor.accept(generation, grid);
+			for(Point p : grid.getGroup().getPoint()){
+				System.out.println(p);
+			}
+			System.out.println(grid.getGroup().getOrigin());
+			if(previous!=null){
+				System.out.println(previous.grid.getGroup().getOrigin());
+			}
+			return new Game(generation + 1, grid.generation(this.monitor), this, this.monitor);
+		}
+
 		public Game(long generation, BiConsumer<Long, Group> monitor) {
 				this(generation, new Grid(generation), null, monitor);
 		}
@@ -99,7 +111,7 @@ public class Game implements Generational<Game, Grid>, Countable, Renderable {
 				return generations > 0 ? growth * 1.0 / generations : -0.1;
 		}
 
-		public static final int MaxGenerations = 1000;
+		public static final int MaxGenerations = 200;
 
 		/**
 		 * Main program for Game of Life.
@@ -109,10 +121,10 @@ public class Game implements Generational<Game, Grid>, Countable, Renderable {
 /*				String patternName = args.length > 0 ? args[0] : "Beehive";
 				System.out.println("Game of Life with starting pattern: " + patternName);
 				final String pattern = Library.get(patternName);*/
-/*				final String pattern = "0 0, 2 0, 0 2";
+				/*final String pattern = "1 3, 2 4, 3 4, 4 3, 4 2, 3 1, 2 2";
 				final Behavior generations = run(0L, pattern);
 				System.out.println("Ending Game of Life after " + generations + " generations");*/
-				GA.generateString();
+				GA.geneticAlgorithm();
 		}
 
 		/**
@@ -125,7 +137,9 @@ public class Game implements Generational<Game, Grid>, Countable, Renderable {
 		public static Behavior run(long generation, String pattern) {
 				return run(generation, pattern, MaxGenerations);
 		}
-
+		public static Behavior run(long generation, String pattern, boolean graph) {
+			return run(generation, pattern, MaxGenerations, graph);
+		}
 		/**
 		 * Run the game starting with pattern.
 		 *
@@ -136,6 +150,9 @@ public class Game implements Generational<Game, Grid>, Countable, Renderable {
 		 */
 		public static Behavior run(long generation, String pattern, int maxGenerations) {
 				return run(generation, Point.points(pattern), maxGenerations);
+		}
+		public static Behavior run(long generation, String pattern, int maxGenerations, boolean graph) {
+			return run(generation, Point.points(pattern), maxGenerations, graph);
 		}
 
 		/**
@@ -148,6 +165,9 @@ public class Game implements Generational<Game, Grid>, Countable, Renderable {
 		 */
 		public static Behavior run(long generation, List<Point> points, int maxGenerations) {
 				return run(create(generation, points), (l, g) -> System.out.println("generation " + l + "; grid=" + g), maxGenerations);
+		}
+		public static Behavior run(long generation, List<Point> points, int maxGenerations, boolean graph) {
+			return run(create(generation, points), (l, g) -> System.out.println("generation " + l + "; grid=" + g), maxGenerations, graph);
 		}
 
 		/**
@@ -177,6 +197,13 @@ public class Game implements Generational<Game, Grid>, Countable, Renderable {
 				while (!g.terminated()) g = g.generation(gridMonitor);
 				int reason = g.generation >= maxGenerations ? 2 : g.getCount() <= 1 ? 0 : 1;
 				return new Behavior(g.generation, g.growthRate(), reason);
+		}
+		public static Behavior run(Game game, BiConsumer<Long, Grid> gridMonitor, int maxGenerations, boolean graph) {
+			if (game == null) throw new LifeException("run: game must not be null");
+			Game g = game;
+			while (!g.terminated()) g = g.generation(gridMonitor, graph);
+			int reason = g.generation >= maxGenerations ? 2 : g.getCount() <= 1 ? 0 : 1;
+			return new Behavior(g.generation, g.growthRate(), reason);
 		}
 
 		/**

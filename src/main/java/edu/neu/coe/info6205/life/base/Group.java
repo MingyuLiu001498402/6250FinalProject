@@ -480,6 +480,10 @@ public class Group implements Generational<Group, Void>, Renderable, Countable {
 		// which is furthest from the origin of the coordinate system.
 		// All cells have negative coordinates compared to extent2.
 
+		public List<Point> getPoint() {
+		return new ArrayList<>(this.points);
+	}
+
 		private void applyLifeRules() {
 				final List<Point> points = CellsAndNeighbors.create(this).updateCells();
 				// add points after moving relative to origin

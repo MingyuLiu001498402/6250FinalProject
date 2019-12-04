@@ -15,19 +15,19 @@ public class GA {
         return generations.generation;
     }
 
-    static void generateString(){
-        while(len==0||len%2!=0) len = new Random().nextInt(10);
+    static void geneticAlgorithm(){
+        while(len==0||len%2!=0) len = new Random().nextInt(4);
 
         Factory<Genotype<IntegerGene>> gtf =
-                Genotype.of(IntegerChromosome.of(-4,5, len+4));
+                Genotype.of(IntegerChromosome.of(-8,8, len+6));
 
         Engine<IntegerGene, Long> engine = Engine
                 .builder(GA::eval, gtf)
-                .populationSize(300)
+                .populationSize(500)
                 .optimize(Optimize.MAXIMUM)
                 .alterers(
-                        new Mutator<>(0.03),
-                        new MeanAlterer<>(0.6))
+                        new Mutator<>(0.3),
+                        new SinglePointCrossover<>(0.3))
                 .build();
 
         Phenotype<IntegerGene, Long> best = engine.stream()
@@ -37,7 +37,7 @@ public class GA {
         System.out.println("\n\n\n\n\n\n\n");
         System.out.println("The Best is"+ best);
         Genotype<IntegerGene> result = best.getGenotype();
-        Game.Behavior generations = Game.run(0L, transfer(result));
+        Game.Behavior generations = Game.run(0L, transfer(result), true);
 
         System.out.println("the longest generation is " + generations.generation);
     }
@@ -45,7 +45,7 @@ public class GA {
     static String transfer(Genotype<IntegerGene> gt){
         String s = "";
         s += gt.getChromosome().getGene(0).intValue();
-        for (int i = 1; i < len; i++) {
+        for (int i = 1; i < len+6; i++) {
             if (i % 2 == 0) s += ",";
             s += " ";
             s += gt.getChromosome().getGene(i).intValue();
