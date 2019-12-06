@@ -58,13 +58,13 @@ public class Game implements Generational<Game, Grid>, Countable, Renderable {
 
 		public Game generation(BiConsumer<Long, Grid> monitor, boolean graph) {
 			monitor.accept(generation, grid);
-			for(Point p : grid.getGroup().getPoint()){
+/*			for(Point p : grid.getGroup().getPoint()){
 				System.out.println(p);
 			}
 			System.out.println(grid.getGroup().getOrigin());
 			if(previous!=null){
 				System.out.println(previous.grid.getGroup().getOrigin());
-			}
+			}*/
 			return new Game(generation + 1, grid.generation(this.monitor), this, this.monitor);
 		}
 

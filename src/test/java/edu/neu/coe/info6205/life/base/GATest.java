@@ -12,22 +12,16 @@ import static org.junit.Assert.assertEquals;
 public class GATest {
     @Test
     public void testTransfer() {
+        GA.min = 6;
         Factory<Genotype<IntegerGene>> gtf =
                 Genotype.of(IntegerChromosome.of(0,0,6));
         Genotype<IntegerGene> g = gtf.newInstance();
         String result = "0 0, 0 0, 0 0";
         assertEquals(result, GA.transfer(g));
     }
+
     @Test
-    public void testEval1(){
-        Factory<Genotype<IntegerGene>> gtf =
-                Genotype.of(IntegerChromosome.of(-2,2, 6));
-        Genotype<IntegerGene> g = gtf.newInstance();
-        String test = GA.transfer(g);
-        assertEquals(Game.run(0L, test).generation, GA.eval(g));
-    }
-    @Test
-    public void testEval2(){
+    public void testEval(){
         GA.min = 10;
         Factory<Genotype<IntegerGene>> gtf =
                 Genotype.of(IntegerChromosome.of(-2,2, 10));
@@ -37,17 +31,11 @@ public class GATest {
     }
 
     @Test
-    public void testGA1(){
+    public void testGA(){
+        GA.min = 6;
         long result = 4L;
         long test = GA.geneticAlgorithm(true);
         assertEquals(result, test);
     }
 
-    @Test
-    public void testGA2(){
-        GA.min = 8;
-        long result = 14L;
-        long test = GA.geneticAlgorithm(true);
-        assertEquals(result, test);
-    }
 }

@@ -3,6 +3,7 @@ package edu.neu.coe.info6205.life.base;
 import io.jenetics.*;
 import io.jenetics.util.Factory;
 import io.jenetics.engine.*;
+import io.jenetics.util.IntRange;
 import io.jenetics.util.RandomRegistry;
 
 import java.util.Random;
@@ -23,7 +24,6 @@ public class GA {
 
         Factory<Genotype<IntegerGene>> gtf =
                 Genotype.of(IntegerChromosome.of(-8,8, len+min));
-
         Engine<IntegerGene, Long> engine = Engine
                 .builder(GA::eval, gtf)
                 .populationSize(500)
@@ -39,10 +39,13 @@ public class GA {
 
         System.out.println("\n\n\n\n\n\n\n");
         System.out.println("The Best is"+ best);
-        Game.Behavior generations = Game.run(0L, transfer(best), true);
 
-        System.out.println("the longest generation is " + (generations.generation-1));
+        Game.Behavior generations =  Game.run(0L, transfer(best), true);
+
+        System.out.println("\n\n");
+        System.out.println("the longest generation is " + generations);
     }
+
 
     static String transfer(Genotype<IntegerGene> gt){
         String s = "";
