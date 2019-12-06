@@ -1,6 +1,8 @@
 package edu.neu.coe.info6205.life.base;
 
 import edu.neu.coe.info6205.life.library.Library;
+
+import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
@@ -56,17 +58,94 @@ public class Game implements Generational<Game, Grid>, Countable, Renderable {
 				return new Game(generation + 1, grid.generation(this.monitor), this, this.monitor);
 		}
 
-		public Game generation(BiConsumer<Long, Grid> monitor, boolean graph) {
-			monitor.accept(generation, grid);
-/*			for(Point p : grid.getGroup().getPoint()){
-				System.out.println(p);
-			}
-			System.out.println(grid.getGroup().getOrigin());
-			if(previous!=null){
-				System.out.println(previous.grid.getGroup().getOrigin());
-			}*/
-			return new Game(generation + 1, grid.generation(this.monitor), this, this.monitor);
+	public Game generation(BiConsumer<Long, Grid> monitor, boolean graph)
+	{
+		GUI gui = GUI.getGUI();
+		gui.setVisible(true);
+		monitor.accept(generation, grid);
+
+//   for(Point p : grid.getGroup().getPoint())
+//   {
+//    System.out.println(p);
+//    gui.curX = gui.startX + p.getX();
+//    System.out.println(gui.curX);
+//    gui.curY = gui.startY - p.getY();
+//    System.out.println(gui.curY);
+//    if(gui.curX < 0 || gui.curX > gui.MAP_WIDTH || gui.curY < 0 || gui.curY > gui.MAP_HEIGHT || gui.curY * gui.MAP_WIDTH + gui.curX > gui.labels.size())
+//    {
+//     continue;
+//    }
+//
+//    gui.labels.get(gui.curY * gui.MAP_WIDTH + gui.curX).setBackground(Color.BLUE);
+//   }
+//
+//   try
+//   {
+//    Thread.sleep(2000);
+//   }
+//
+//   catch(InterruptedException e)
+//   {
+//    e.printStackTrace();
+//   }
+
+		for(int i = 0; i < gui.MAP_WIDTH * gui.MAP_HEIGHT; i++)
+		{
+			gui.labels.get(i).setBackground(Color.white);
 		}
+
+		if(generation == 0)
+		{
+			System.out.println(grid.getGroup().getOrigin());
+			gui.startX = gui.g0X;
+			System.out.println("generation0" + gui.startX);
+			gui.startY = gui.g0Y;
+			System.out.println("generation0" + gui.startY);
+			System.out.println(gui.labels.size());
+		}
+
+		else
+		{
+			if(previous != null)
+			{
+				if(grid.getGroup().getOrigin().getX() != previous.grid.getGroup().getOrigin().getX() ||
+						grid.getGroup().getOrigin().getY() != previous.grid.getGroup().getOrigin().getY())
+				{
+					gui.startX = gui.startX + grid.getGroup().getOrigin().getX();
+					System.out.println("generation:" + gui.startX);
+					gui.startY = gui.startY - grid.getGroup().getOrigin().getY();
+					System.out.println("generation:" + gui.startY);
+				}
+			}
+		}
+
+		for(Point p : grid.getGroup().getPoint())
+		{
+			System.out.println(p);
+			gui.curX = gui.startX + p.getX();
+			System.out.println(gui.curX);
+			gui.curY = gui.startY - p.getY();
+			System.out.println(gui.curY);
+			if(gui.curX < 0 || gui.curX > gui.MAP_WIDTH || gui.curY < 0 || gui.curY > gui.MAP_HEIGHT || gui.curY * gui.MAP_WIDTH + gui.curX > gui.labels.size())
+			{
+				continue;
+			}
+
+			gui.labels.get(gui.curY * gui.MAP_WIDTH + gui.curX).setBackground(Color.BLUE);
+		}
+
+		try
+		{
+			Thread.sleep(2000);
+		}
+
+		catch(InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+
+		return new Game(generation + 1, grid.generation(this.monitor), this, this.monitor);
+	}
 
 		public Game(long generation, BiConsumer<Long, Group> monitor) {
 				this(generation, new Grid(generation), null, monitor);
