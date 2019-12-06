@@ -58,59 +58,26 @@ public class Game implements Generational<Game, Grid>, Countable, Renderable {
 				return new Game(generation + 1, grid.generation(this.monitor), this, this.monitor);
 		}
 
-	public Game generation(BiConsumer<Long, Grid> monitor, boolean graph)
-	{
+	public Game generation(BiConsumer<Long, Grid> monitor, boolean graph) {
 		GUI gui = GUI.getGUI();
 		gui.setVisible(true);
 		monitor.accept(generation, grid);
 
-//   for(Point p : grid.getGroup().getPoint())
-//   {
-//    System.out.println(p);
-//    gui.curX = gui.startX + p.getX();
-//    System.out.println(gui.curX);
-//    gui.curY = gui.startY - p.getY();
-//    System.out.println(gui.curY);
-//    if(gui.curX < 0 || gui.curX > gui.MAP_WIDTH || gui.curY < 0 || gui.curY > gui.MAP_HEIGHT || gui.curY * gui.MAP_WIDTH + gui.curX > gui.labels.size())
-//    {
-//     continue;
-//    }
-//
-//    gui.labels.get(gui.curY * gui.MAP_WIDTH + gui.curX).setBackground(Color.BLUE);
-//   }
-//
-//   try
-//   {
-//    Thread.sleep(2000);
-//   }
-//
-//   catch(InterruptedException e)
-//   {
-//    e.printStackTrace();
-//   }
-
-		for(int i = 0; i < gui.MAP_WIDTH * gui.MAP_HEIGHT; i++)
-		{
+		for(int i = 0; i < gui.MAP_WIDTH * gui.MAP_HEIGHT; i++) {
 			gui.labels.get(i).setBackground(Color.white);
 		}
 
-		if(generation == 0)
-		{
+		if(generation == 0) {
 			System.out.println(grid.getGroup().getOrigin());
 			gui.startX = gui.g0X;
 			System.out.println("generation0" + gui.startX);
 			gui.startY = gui.g0Y;
 			System.out.println("generation0" + gui.startY);
 			System.out.println(gui.labels.size());
-		}
-
-		else
-		{
-			if(previous != null)
-			{
+		}else {
+			if(previous != null) {
 				if(grid.getGroup().getOrigin().getX() != previous.grid.getGroup().getOrigin().getX() ||
-						grid.getGroup().getOrigin().getY() != previous.grid.getGroup().getOrigin().getY())
-				{
+						grid.getGroup().getOrigin().getY() != previous.grid.getGroup().getOrigin().getY()) {
 					gui.startX = gui.startX + grid.getGroup().getOrigin().getX();
 					System.out.println("generation:" + gui.startX);
 					gui.startY = gui.startY - grid.getGroup().getOrigin().getY();
@@ -119,28 +86,20 @@ public class Game implements Generational<Game, Grid>, Countable, Renderable {
 			}
 		}
 
-		for(Point p : grid.getGroup().getPoint())
-		{
+		for(Point p : grid.getGroup().getPoint()) {
 			System.out.println(p);
 			gui.curX = gui.startX + p.getX();
-			System.out.println(gui.curX);
 			gui.curY = gui.startY - p.getY();
-			System.out.println(gui.curY);
-			if(gui.curX < 0 || gui.curX > gui.MAP_WIDTH || gui.curY < 0 || gui.curY > gui.MAP_HEIGHT || gui.curY * gui.MAP_WIDTH + gui.curX > gui.labels.size())
-			{
+			if(gui.curX < 0 || gui.curX > gui.MAP_WIDTH || gui.curY < 0 || gui.curY > gui.MAP_HEIGHT || gui.curY * gui.MAP_WIDTH + gui.curX > gui.labels.size()) {
 				continue;
 			}
 
 			gui.labels.get(gui.curY * gui.MAP_WIDTH + gui.curX).setBackground(Color.BLUE);
 		}
 
-		try
-		{
+		try {
 			Thread.sleep(2000);
-		}
-
-		catch(InterruptedException e)
-		{
+		}catch(InterruptedException e) {
 			e.printStackTrace();
 		}
 
@@ -197,14 +156,8 @@ public class Game implements Generational<Game, Grid>, Countable, Renderable {
 		 * @param args the name of the starting pattern (defaults to "Blip")
 		 */
 		public static void main(String[] args) {
-/*				String patternName = args.length > 0 ? args[0] : "Beehive";
-				System.out.println("Game of Life with starting pattern: " + patternName);
-				final String pattern = Library.get(patternName);*/
-				/*final String pattern = "1 3, 2 4, 3 4, 4 3, 4 2, 3 1, 2 2";
-				final Behavior generations = run(0L, pattern);
-				System.out.println("Ending Game of Life after " + generations + " generations");*/
+
 				GA.geneticAlgorithm();
-				//GA.test();
 		}
 
 		/**
