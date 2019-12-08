@@ -90,7 +90,7 @@ public class Game implements Generational<Game, Grid>, Countable, Renderable {
 			System.out.println(p);
 			gui.curX = gui.startX + p.getX();
 			gui.curY = gui.startY - p.getY();
-			if(gui.curX < 0 || gui.curX > gui.MAP_WIDTH || gui.curY < 0 || gui.curY > gui.MAP_HEIGHT || gui.curY * gui.MAP_WIDTH + gui.curX > gui.labels.size()) {
+			if(gui.curX < 0 || gui.curX > gui.MAP_WIDTH || gui.curY < 0 || gui.curY > gui.MAP_HEIGHT || gui.curY * gui.MAP_WIDTH + gui.curX >= gui.labels.size()) {
 				continue;
 			}
 
@@ -98,7 +98,7 @@ public class Game implements Generational<Game, Grid>, Countable, Renderable {
 		}
 
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(400);
 		}catch(InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -149,7 +149,7 @@ public class Game implements Generational<Game, Grid>, Countable, Renderable {
 				return generations > 0 ? growth * 1.0 / generations : -0.1;
 		}
 
-		public static final int MaxGenerations = 100;
+		public static final int MaxGenerations = 1000;
 
 		/**
 		 * Main program for Game of Life.
